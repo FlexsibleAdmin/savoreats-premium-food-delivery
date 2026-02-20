@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { AppNavbar } from '@/components/layout/AppNavbar';
 import { MOCK_RESTAURANTS, MOCK_MENU_ITEMS } from '@shared/mock-data';
 import { useCartStore } from '@/store/cartStore';
@@ -37,10 +38,13 @@ export function RestaurantPage() {
       <main className="flex-1 pb-20">
         {/* Restaurant Hero */}
         <div className="relative h-64 md:h-80 lg:h-96 w-full bg-stone-900">
-          <img 
-            src={restaurant.image} 
-            alt={restaurant.name} 
-            className="w-full h-full object-cover opacity-60"
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ duration: 0.8 }}
+            src={restaurant.image}
+            alt={restaurant.name}
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
           <div className="absolute top-4 left-4 sm:left-6 lg:left-8">
@@ -51,7 +55,12 @@ export function RestaurantPage() {
         </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
           {/* Info Card */}
-          <div className="bg-card rounded-2xl p-6 md:p-8 shadow-lg border mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-card rounded-2xl p-6 md:p-8 shadow-lg border mb-8"
+          >
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div>
                 <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">{restaurant.name}</h1>
@@ -77,20 +86,29 @@ export function RestaurantPage() {
                   ))}
                 </div>
               </div>
-              <Button variant="outline" className="shrink-0 gap-2">
+              <Button variant="outline" className="shrink-0 gap-2 rounded-full">
                 <Info className="h-4 w-4" /> More Info
               </Button>
             </div>
-          </div>
+          </motion.div>
           {/* Menu Sections */}
           <div className="space-y-12">
-            {categories.map(([categoryName, items]) => (
-              <section key={categoryName} className="space-y-6">
+            {categories.map(([categoryName, items], categoryIndex) => (
+              <motion.section 
+                key={categoryName} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + categoryIndex * 0.1 }}
+                className="space-y-6"
+              >
                 <h2 className="text-2xl font-bold tracking-tight">{categoryName}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  {items.map((item) => (
-                    <div 
-                      key={item.id} 
+                  {items.map((item, itemIndex) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.3 + (categoryIndex * 0.1) + (itemIndex * 0.05) }}
                       className="group flex bg-card rounded-xl border shadow-sm hover:shadow-md transition-all p-4 gap-4"
                     >
                       <div className="flex-1 flex flex-col">
@@ -105,9 +123,9 @@ export function RestaurantPage() {
                         </p>
                         <div className="flex items-center justify-between mt-auto">
                           <span className="font-semibold text-lg">${item.price.toFixed(2)}</span>
-                          <Button 
-                            size="sm" 
-                            className="rounded-full px-4 shadow-sm hover:shadow-md transition-all"
+                          <Button
+                            size="sm"
+                            className="rounded-full px-4 shadow-sm hover:shadow-md transition-all active:scale-95"
                             onClick={() => addItem(item)}
                           >
                             <Plus className="h-4 w-4 mr-1" /> Add
@@ -116,17 +134,17 @@ export function RestaurantPage() {
                       </div>
                       {item.image && (
                         <div className="h-28 w-28 rounded-lg overflow-hidden shrink-0 bg-muted">
-                          <img 
-                            src={item.image} 
-                            alt={item.name} 
+                          <img
+                            src={item.image}
+                            alt={item.name}
                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
                       )}
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
-              </section>
+              </motion.section>
             ))}
           </div>
         </div>
