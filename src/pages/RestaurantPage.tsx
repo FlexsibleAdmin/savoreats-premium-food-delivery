@@ -11,6 +11,15 @@ export function RestaurantPage() {
   const restaurant = useMemo(() => MOCK_RESTAURANTS.find(r => r.id === id), [id]);
   const menuItems = useMemo(() => MOCK_MENU_ITEMS.filter(m => m.restaurantId === id), [id]);
   const addItem = useCartStore(s => s.addItem);
+  // Group menu items by category
+  const categories = useMemo(() => {
+    const grouped = menuItems.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    }, {} as Record<string, typeof menuItems>);
+    return Object.entries(grouped);
+  }, [menuItems]);
   if (!restaurant) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
@@ -22,15 +31,6 @@ export function RestaurantPage() {
       </div>
     );
   }
-  // Group menu items by category
-  const categories = useMemo(() => {
-    const grouped = menuItems.reduce((acc, item) => {
-      if (!acc[item.category]) acc[item.category] = [];
-      acc[item.category].push(item);
-      return acc;
-    }, {} as Record<string, typeof menuItems>);
-    return Object.entries(grouped);
-  }, [menuItems]);
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <AppNavbar />

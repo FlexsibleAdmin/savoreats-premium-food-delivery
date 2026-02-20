@@ -44,3 +44,15 @@ export interface MenuItem {
 export interface CartItem extends MenuItem {
   quantity: number;
 }
+
+export type OrderStatus = 'placed' | 'preparing' | 'delivering' | 'delivered';
+
+export interface Order {
+  id: string;
+  userId: string;
+  items: CartItem[];
+  total: number;
+  status: OrderStatus;
+  deliveryAddress: string;
+  createdAt: number;
+}

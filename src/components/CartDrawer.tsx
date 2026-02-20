@@ -1,10 +1,11 @@
 import React from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store/cartStore';
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 interface CartDrawerProps {
   trigger: React.ReactNode;
 }
@@ -12,6 +13,7 @@ export function CartDrawer({ trigger }: CartDrawerProps) {
   const items = useCartStore(s => s.items);
   const updateQuantity = useCartStore(s => s.updateQuantity);
   const removeItem = useCartStore(s => s.removeItem);
+  const navigate = useNavigate();
   const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const deliveryFee = items.length > 0 ? 2.99 : 0;
   const taxes = subtotal * 0.08;
@@ -105,9 +107,14 @@ export function CartDrawer({ trigger }: CartDrawerProps) {
                 <span>${total.toFixed(2)}</span>
               </div>
             </div>
-            <Button className="w-full h-12 text-lg font-medium shadow-primary hover:shadow-glow transition-all">
-              Checkout <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <SheetClose asChild>
+              <Button 
+                className="w-full h-12 text-lg font-medium shadow-primary hover:shadow-glow transition-all"
+                onClick={() => navigate('/checkout')}
+              >
+                Checkout <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </SheetClose>
           </div>
         )}
       </SheetContent>
