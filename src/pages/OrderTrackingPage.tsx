@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { AppNavbar } from '@/components/layout/AppNavbar';
 import { api } from '@/lib/api-client';
 import { Order, OrderStatus } from '@shared/types';
-import { CheckCircle2, Clock, MapPin, Package, ChefHat, Bike, Home, RefreshCw } from 'lucide-react';
+import { Clock, MapPin, Package, ChefHat, Bike, Home, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
@@ -98,7 +98,7 @@ export function OrderTrackingPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <AppNavbar />
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 md:py-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -107,7 +107,7 @@ export function OrderTrackingPage() {
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">Track Your Order</h1>
           <p className="text-muted-foreground">Order #{order.id.slice(0, 8).toUpperCase()}</p>
         </motion.div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -129,8 +129,8 @@ export function OrderTrackingPage() {
                 const isCurrent = index === currentStepIndex;
                 const Icon = step.icon;
                 return (
-                  <motion.div 
-                    key={step.status} 
+                  <motion.div
+                    key={step.status}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + index * 0.15, duration: 0.4 }}
@@ -163,26 +163,26 @@ export function OrderTrackingPage() {
             </div>
           </div>
           {order.status !== 'delivered' && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
               className="mt-10 flex justify-center"
             >
-              <Button 
-                onClick={handleSimulateProgress} 
-                variant="outline" 
+              <Button
+                onClick={handleSimulateProgress}
+                variant="outline"
                 className="gap-2 rounded-full shadow-sm hover:shadow-md transition-all"
                 disabled={isSimulating}
               >
-                <RefreshCw className={`h-4 w-4 ${isSimulating ? 'animate-spin' : ''}`} /> 
+                <RefreshCw className={`h-4 w-4 ${isSimulating ? 'animate-spin' : ''}`} />
                 {isSimulating ? 'Updating...' : 'Simulate Next Step'}
               </Button>
             </motion.div>
           )}
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -199,7 +199,7 @@ export function OrderTrackingPage() {
               {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
           </motion.div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -212,7 +212,7 @@ export function OrderTrackingPage() {
             <p className="font-medium">{order.deliveryAddress}</p>
           </motion.div>
         </div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}

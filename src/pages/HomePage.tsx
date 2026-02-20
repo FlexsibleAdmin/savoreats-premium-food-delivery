@@ -13,7 +13,7 @@ const CATEGORIES = [
   { name: 'Burgers', icon: '🍔' },
   { name: 'Healthy', icon: '🥗' },
   { name: 'Desserts', icon: '🍰' },
-  { name: 'Mexican', icon: '��' },
+  { name: 'Mexican', icon: '🌮' },
 ];
 export function HomePage() {
   return (
@@ -31,7 +31,7 @@ export function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-stone-900 via-stone-900/80 to-transparent" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
