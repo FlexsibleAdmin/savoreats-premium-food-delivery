@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AppNavbar } from '@/components/layout/AppNavbar';
 import { MOCK_RESTAURANTS, MOCK_MENU_ITEMS } from '@shared/mock-data';
@@ -7,8 +7,11 @@ import { useCartStore } from '@/store/cartStore';
 import { Button } from '@/components/ui/button';
 import { Star, Clock, Bike, Info, Plus, ChevronLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { MenuItem } from '@shared/types';
 export function RestaurantPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const restaurant = useMemo(() => MOCK_RESTAURANTS.find(r => r.id === id), [id]);
   const menuItems = useMemo(() => MOCK_MENU_ITEMS.filter(m => m.restaurantId === id), [id]);
   const addItem = useCartStore(s => s.addItem);
@@ -21,6 +24,17 @@ export function RestaurantPage() {
     }, {} as Record<string, typeof menuItems>);
     return Object.entries(grouped);
   }, [menuItems]);
+  const handleAddItem = (item: MenuItem) => {
+    addItem(item);
+    toast.success(`Added ${item.name} to cart`, {
+      description: 'Your item has been added to the cart.',
+      action: {
+        label: 'Checkout',
+        onClick: () => navigate('/checkout')
+      },
+      duration: 4000,
+    });
+  };
   if (!restaurant) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
@@ -55,7 +69,7 @@ export function RestaurantPage() {
         </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
           {/* Info Card */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -94,8 +108,8 @@ export function RestaurantPage() {
           {/* Menu Sections */}
           <div className="space-y-12">
             {categories.map(([categoryName, items], categoryIndex) => (
-              <motion.section 
-                key={categoryName} 
+              <motion.section
+                key={categoryName}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + categoryIndex * 0.1 }}
@@ -126,7 +140,7 @@ export function RestaurantPage() {
                           <Button
                             size="sm"
                             className="rounded-full px-4 shadow-sm hover:shadow-md transition-all active:scale-95"
-                            onClick={() => addItem(item)}
+                            onClick={() => handleAddItem(item)}
                           >
                             <Plus className="h-4 w-4 mr-1" /> Add
                           </Button>
